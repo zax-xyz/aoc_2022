@@ -28,14 +28,10 @@ pub fn part2() -> u32 {
         .expect("could not open file")
         .map(|line| {
             let (theirs, ours) = line.as_ref().unwrap().split_once(' ').unwrap();
-            let theirs_num: u32 = (theirs.bytes().next().unwrap() - b'A').into();
+            let theirs_num: i32 = (theirs.bytes().next().unwrap() - b'A').into();
+            let ours_num: i32 = (ours.bytes().next().unwrap() - b'X').into();
 
-            1 + match ours {
-                "X" => (theirs_num + 2) % 3,
-                "Y" => theirs_num + 3,
-                "Z" => ((theirs_num + 1) % 3) + 6,
-                _ => panic!("bad key"),
-            }
+            1 + ((theirs_num + ours_num + 2) % 3) + ours_num * 3
         })
-        .sum()
+        .sum::<i32>() as u32
 }
