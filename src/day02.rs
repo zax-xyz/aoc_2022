@@ -27,17 +27,14 @@ pub fn part2() -> u32 {
     read_lines("inputs/day02.txt")
         .expect("could not open file")
         .map(|line| {
-            if let Some((theirs, ours)) = line.as_ref().unwrap().split_once(' ') {
-                let theirs_num: u32 = (theirs.bytes().next().unwrap() - b'A').into();
+            let (theirs, ours) = line.as_ref().unwrap().split_once(' ').unwrap();
+            let theirs_num: u32 = (theirs.bytes().next().unwrap() - b'A').into();
 
-                1 + match ours {
-                    "X" => (theirs_num + 2) % 3,
-                    "Y" => theirs_num + 3,
-                    "Z" => ((theirs_num + 1) % 3) + 6,
-                    _ => panic!("bad key"),
-                }
-            } else {
-                panic!("could not parse line: {}", line.unwrap())
+            1 + match ours {
+                "X" => (theirs_num + 2) % 3,
+                "Y" => theirs_num + 3,
+                "Z" => ((theirs_num + 1) % 3) + 6,
+                _ => panic!("bad key"),
             }
         })
         .sum()
