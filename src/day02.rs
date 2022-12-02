@@ -26,12 +26,12 @@ pub fn part1() -> u32 {
 pub fn part2() -> u32 {
     read_lines("inputs/day02.txt")
         .expect("could not open file")
-        .map(|line| {
+        .map(|line| -> u32 {
             let (theirs, ours) = line.as_ref().unwrap().split_once(' ').unwrap();
-            let theirs_num: i32 = (theirs.bytes().next().unwrap() - b'A').into();
-            let ours_num: i32 = (ours.bytes().next().unwrap() - b'X').into();
+            let theirs_num = theirs.bytes().next().unwrap() - b'A';
+            let ours_num = ours.bytes().next().unwrap() - b'X';
 
-            1 + ((theirs_num + ours_num + 2) % 3) + ours_num * 3
+            (1 + ((theirs_num + ours_num + 2) % 3) + ours_num * 3).into()
         })
-        .sum::<i32>() as u32
+        .sum()
 }
