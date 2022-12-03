@@ -1,7 +1,7 @@
-mod day02;
+mod day03;
 mod util;
 
 fn main() {
-    println!("{}", day02::part1());
-    println!("{}", day02::part2());
+    println!("{}", day03::part1());
+    println!("{}", day03::part2());
 }
