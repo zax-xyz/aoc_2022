@@ -7,7 +7,7 @@ type Pair = (Interval, Interval);
 fn pairs() -> impl Iterator<Item = Pair> {
     read_lines("inputs/day04.txt").map(|line| -> Pair {
         line.split(',')
-            .map(|p| -> (u32, u32) {
+            .map(|p| -> Interval {
                 p.split('-')
                     .map(|n| str::parse::<u32>(n).ok().unwrap())
                     .next_tuple()
