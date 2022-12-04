@@ -30,13 +30,11 @@ pub fn part2() -> u32 {
     read_lines("inputs/day03.txt")
         .chunks(3)
         .into_iter()
-        .map(|lines| -> u32 {
+        .flat_map(|lines| {
             lines
                 .map(|line| priorities(&line))
                 .reduce(|accum, p| accum.intersection(&p).copied().collect())
                 .unwrap()
-                .iter()
-                .sum()
         })
         .sum()
 }
