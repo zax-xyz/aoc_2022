@@ -24,5 +24,19 @@ pub fn part1() -> u32 {
 }
 
 pub fn part2() -> u32 {
-    0
+    read_lines("inputs/day04.txt")
+        .filter(|line| {
+            let (first, second) = line
+                .split(',')
+                .map(|p| -> (u32, u32) {
+                    p.split('-').map(|n| str::parse::<u32>(n).ok().unwrap()).next_tuple().unwrap()
+                })
+                .next_tuple()
+                .unwrap();
+
+            first.0 <= second.1 && first.1 >= second.0
+        })
+        .count()
+        .try_into()
+        .unwrap()
 }
