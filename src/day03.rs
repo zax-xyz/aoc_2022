@@ -36,7 +36,7 @@ pub fn part2() -> u32 {
         .map(|lines| -> u32 {
             lines
                 .map(|line| priorities(&line.unwrap()))
-                .reduce(|s, p| s.intersection(&p).copied().collect())
+                .reduce(|accum, p| accum.intersection(&p).copied().collect())
                 .unwrap()
                 .iter()
                 .sum()
