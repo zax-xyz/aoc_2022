@@ -11,7 +11,10 @@ pub fn part1() -> u32 {
             let (first, second) = line
                 .split(',')
                 .map(|p| -> (u32, u32) {
-                    p.split('-').map(|n| str::parse::<u32>(n).ok().unwrap()).next_tuple().unwrap()
+                    p.split('-')
+                        .map(|n| str::parse::<u32>(n).ok().unwrap())
+                        .next_tuple()
+                        .unwrap()
                 })
                 .next_tuple()
                 .unwrap();
@@ -29,7 +32,10 @@ pub fn part2() -> u32 {
             let (first, second) = line
                 .split(',')
                 .map(|p| -> (u32, u32) {
-                    p.split('-').map(|n| str::parse::<u32>(n).ok().unwrap()).next_tuple().unwrap()
+                    p.split('-')
+                        .map(|n| str::parse::<u32>(n).ok().unwrap())
+                        .next_tuple()
+                        .unwrap()
                 })
                 .next_tuple()
                 .unwrap();
