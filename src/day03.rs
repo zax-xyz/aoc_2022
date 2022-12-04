@@ -33,14 +33,11 @@ pub fn part2() -> u32 {
         .unwrap()
         .chunks(3)
         .into_iter()
-        .map(|mut lines| -> u32 {
-            let initial = priorities(&lines.next().unwrap().ok().unwrap());
+        .map(|lines| -> u32 {
             lines
-                .fold(initial, |s, line| {
-                    s.intersection(&priorities(&line.unwrap()))
-                        .copied()
-                        .collect()
-                })
+                .map(|line| priorities(&line.unwrap()))
+                .reduce(|s, p| s.intersection(&p).copied().collect())
+                .unwrap()
                 .iter()
                 .sum()
         })
