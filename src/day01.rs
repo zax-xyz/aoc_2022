@@ -6,11 +6,10 @@ use std::collections::BinaryHeap;
 
 pub fn part1() -> u32 {
     read_lines("inputs/day01p1.txt")
-        .expect("Reading file failed :(")
-        .group_by(|line| line.as_ref().unwrap().len() == 0)
+        .group_by(|line| line.is_empty())
         .into_iter()
         // assumes parsing only fails on the blank lines
-        .filter_map(|(_, group)| group.map(|l| str::parse::<u32>(&l.unwrap()).ok()).sum())
+        .filter_map(|(_, group)| group.map(|l| str::parse::<u32>(&l).ok()).sum())
         .max()
         .unwrap()
 }
@@ -19,8 +18,7 @@ pub fn part2() -> u32 {
     let mut calories_heap = BinaryHeap::<i32>::new();
 
     let groups = read_lines("inputs/day01p1.txt")
-        .expect("Reading file failed :(")
-        .group_by(|line| line.as_ref().unwrap().len() == 0);
+        .group_by(|line| line.is_empty());
 
     let mut calories = groups
         .into_iter()
@@ -28,7 +26,7 @@ pub fn part2() -> u32 {
         .filter_map(|(_, group)| {
             group
                 .map(|l| {
-                    (l.as_ref().unwrap().len() > 0).then(|| str::parse::<i32>(&l.unwrap()).unwrap())
+                    (!l.is_empty()).then(|| str::parse::<i32>(&l).unwrap())
                 })
                 .sum::<Option<i32>>()
         });

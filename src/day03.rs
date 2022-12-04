@@ -17,10 +17,8 @@ fn priorities(line: &str) -> HashSet<u32> {
 
 pub fn part1() -> u32 {
     read_lines("inputs/day03.txt")
-        .unwrap()
         .map(|line| {
-            let unwrapped_line = line.unwrap();
-            let (first, second) = unwrapped_line.split_at(unwrapped_line.len() / 2);
+            let (first, second) = line.split_at(line.len() / 2);
             priorities(first)
                 .intersection(&priorities(second))
                 .sum::<u32>()
@@ -30,12 +28,11 @@ pub fn part1() -> u32 {
 
 pub fn part2() -> u32 {
     read_lines("inputs/day03.txt")
-        .unwrap()
         .chunks(3)
         .into_iter()
         .map(|lines| -> u32 {
             lines
-                .map(|line| priorities(&line.unwrap()))
+                .map(|line| priorities(&line))
                 .reduce(|accum, p| accum.intersection(&p).copied().collect())
                 .unwrap()
                 .iter()

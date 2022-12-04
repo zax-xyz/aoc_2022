@@ -2,9 +2,8 @@ use crate::util::read_lines;
 
 pub fn part1() -> u32 {
     read_lines("inputs/day02.txt")
-        .expect("could not open file")
         .map(|line| {
-            if let Some((theirs, ours)) = line.as_ref().unwrap().split_once(' ') {
+            if let Some((theirs, ours)) = line.split_once(' ') {
                 let theirs_num = theirs.bytes().next().unwrap() - b'A' + 1;
                 let ours_num = ours.bytes().next().unwrap() - b'X' + 1;
                 let res = (ours_num as i8 - theirs_num as i8).rem_euclid(3);
@@ -17,7 +16,7 @@ pub fn part1() -> u32 {
                         _ => panic!("bad nums"),
                     }
             } else {
-                panic!("could not parse line: {}", line.unwrap())
+                panic!("could not parse line: {}", line)
             }
         })
         .sum()
@@ -25,9 +24,8 @@ pub fn part1() -> u32 {
 
 pub fn part2() -> u32 {
     read_lines("inputs/day02.txt")
-        .expect("could not open file")
         .map(|line| -> u32 {
-            let (theirs, ours) = line.as_ref().unwrap().split_once(' ').unwrap();
+            let (theirs, ours) = line.split_once(' ').unwrap();
             let theirs_num = theirs.bytes().next().unwrap() - b'A';
             let ours_num = ours.bytes().next().unwrap() - b'X';
 
