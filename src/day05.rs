@@ -10,15 +10,15 @@ fn parse_line_into_stacks(line: &str, stacks: &mut Vec<VecDeque<char>>) {
         .for_each(|(i, mut x)| {
             let crate_ = x.nth(1).unwrap();
             if crate_ != ' ' {
-                stacks
-                    .get_mut(i)
-                    .unwrap()
-                    .push_front(crate_);
+                stacks.get_mut(i).unwrap().push_front(crate_);
             }
         });
 }
 
-pub fn part1() -> String {
+fn parse_file() -> (
+    Vec<VecDeque<char>>,
+    impl Iterator<Item = (usize, usize, usize)>,
+) {
     let mut lines = read_lines("inputs/day05.txt");
     let line = lines.next().unwrap();
     let mut stacks = vec![VecDeque::<char>::new(); (line.len() + 1) / 4];
@@ -32,63 +32,51 @@ pub fn part1() -> String {
         parse_line_into_stacks(&line, &mut stacks);
     }
 
-    lines.for_each(|line| {
-        let parts: Vec<_> = line
-            .split(' ')
-            .enumerate()
-            .filter(|(i, _)| i % 2 == 1)
-            .map(|(_, n)| str::parse::<usize>(n).ok().unwrap())
-            .collect();
+    (
+        stacks,
+        lines.map(|line| {
+            let mut parts = line
+                .split(' ')
+                .enumerate()
+                .filter(|(i, _)| i % 2 == 1)
+                .map(|(_, n)| str::parse::<usize>(n).ok().unwrap());
 
-        if let [qty, from, to] = &parts[..] {
-            (0..*qty).for_each(|_| {
-                let crate_from = stacks.get_mut(*from - 1).unwrap().pop_back().unwrap();
-                stacks
-                    .get_mut(*to - 1)
-                    .unwrap()
-                    .push_back(crate_from);
-            })
-        }
+            (
+                parts.next().unwrap(),
+                parts.next().unwrap() - 1,
+                parts.next().unwrap() - 1,
+            )
+        }),
+    )
+}
+
+pub fn part1() -> String {
+    let (mut stacks, lines) = parse_file();
+
+    lines.for_each(|(qty, from, to)| {
+        (0..qty).for_each(|_| {
+            let crate_from = stacks.get_mut(from).unwrap().pop_back().unwrap();
+            stacks.get_mut(to).unwrap().push_back(crate_from);
+        })
     });
 
     stacks.iter().map(|stack| stack.back().unwrap()).join("")
 }
 
 pub fn part2() -> String {
-    let mut lines = read_lines("inputs/day05.txt");
-    let line = lines.next().unwrap();
-    let mut stacks = vec![VecDeque::<char>::new(); (line.len() + 1) / 4];
-    parse_line_into_stacks(&line, &mut stacks);
+    let (mut stacks, lines) = parse_file();
 
-    for line in lines.by_ref() {
-        if line.is_empty() {
-            break;
-        }
+    lines.for_each(|(qty, from, to)| {
+        let from_stack = stacks.get_mut(from).unwrap();
+        let mut temp_stack = Vec::new();
+        (0..qty).for_each(|_| {
+            temp_stack.push(from_stack.pop_back().unwrap());
+        });
 
-        parse_line_into_stacks(&line, &mut stacks);
-    }
-
-    lines.for_each(|line| {
-        let mut parts = line
-            .split(' ')
-            .enumerate()
-            .filter(|(i, _)| i % 2 == 1)
-            .map(|(_, n)| str::parse::<usize>(n).ok().unwrap());
-
-        let qty = parts.next().unwrap();
-
-        if let [from, to] = &parts.map(|n| n - 1).collect_vec()[..] {
-            let from_stack = stacks.get_mut(*from).unwrap();
-            let mut temp_stack = Vec::new();
-            (0..qty).for_each(|_| {
-                temp_stack.push(from_stack.pop_back().unwrap());
-            });
-
-            let to_stack = stacks.get_mut(*to).unwrap();
-            (0..qty).for_each(|_| {
-                to_stack.push_back(temp_stack.pop().unwrap());
-            });
-        }
+        let to_stack = stacks.get_mut(to).unwrap();
+        (0..qty).for_each(|_| {
+            to_stack.push_back(temp_stack.pop().unwrap());
+        });
     });
 
     stacks.iter().map(|stack| stack.back().unwrap()).join("")
