@@ -77,7 +77,25 @@ impl Dir {
 
         helper(self, 1);
     }
+
+    // fn iter(&self) -> DirIter {
+    //     DirIter {
+    //         children: &Box::new(self.children.values()),
+    //         parent: None,
+    //     }
+    // }
 }
+
+// struct DirIter<'a> {
+//     children: &'a Box<dyn Iterator<Item = Rc<RefCell<Dir>>>>,
+//     parent: Option<Box<DirIter<'a>>>,
+// }
+
+// impl<'a> Iterator for DirIter<'a> {
+//     type Item = Dir;
+
+//     fn next(&mut self) -> Option<Self::Item> {}
+// }
 
 fn parse_into_tree() -> Rc<RefCell<Dir>> {
     let lines = read_lines("inputs/day07.txt").skip(1);
@@ -114,10 +132,28 @@ fn parse_into_tree() -> Rc<RefCell<Dir>> {
 pub fn part1() -> u32 {
     let root = parse_into_tree();
 
-    Rc::clone(&root).borrow_mut().calculate_total_sizes();
+    root.borrow_mut().calculate_total_sizes();
     Rc::clone(&root).borrow().wtf()
 }
 
 pub fn part2() -> u32 {
-    0
+    let root = parse_into_tree();
+    root.borrow_mut().calculate_total_sizes();
+
+    let free_space = 70000000 - root.borrow().total_size;
+    let required = 30000000 - free_space;
+
+    fn helper(tree: &Dir, required: u32, mut lowest: u32) -> u32 {
+        if tree.total_size >= required && tree.total_size < lowest {
+            lowest = tree.total_size;
+        }
+
+        tree.children.values().for_each(|c| {
+            lowest = helper(&c.borrow(), required, lowest);
+        });
+
+        lowest
+    }
+
+    helper(&Rc::clone(&root).borrow(), required, u32::MAX)
 }
