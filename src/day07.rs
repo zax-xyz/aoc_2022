@@ -79,7 +79,6 @@ impl Dir {
     }
 }
 
-// FIXME: this code doesn't work lmao
 pub fn part1() -> u32 {
     let lines = read_lines("inputs/day07.txt").skip(1);
     let root = Rc::new(RefCell::new(Dir::new(None)));
