@@ -79,7 +79,7 @@ impl Dir {
     }
 }
 
-pub fn part1() -> u32 {
+fn parse_into_tree() -> Rc<RefCell<Dir>> {
     let lines = read_lines("inputs/day07.txt").skip(1);
     let root = Rc::new(RefCell::new(Dir::new(None)));
     let mut cursor = Rc::clone(&root);
@@ -107,6 +107,12 @@ pub fn part1() -> u32 {
             size => cursor.borrow_mut().size += str::parse::<u32>(size).unwrap(),
         }
     });
+
+    root
+}
+
+pub fn part1() -> u32 {
+    let root = parse_into_tree();
 
     Rc::clone(&root).borrow_mut().calculate_total_sizes();
     Rc::clone(&root).borrow().wtf()
