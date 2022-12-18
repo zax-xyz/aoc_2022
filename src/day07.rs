@@ -2,7 +2,6 @@ use std::{cell::RefCell, collections::HashMap, rc::Rc};
 
 use crate::util::read_lines;
 
-#[derive(Debug)]
 struct Dir {
     children: HashMap<String, Rc<RefCell<Dir>>>,
     parent: Option<Rc<RefCell<Dir>>>,
