@@ -77,25 +77,7 @@ impl Dir {
 
         helper(self, 1);
     }
-
-    // fn iter(&self) -> DirIter {
-    //     DirIter {
-    //         children: &Box::new(self.children.values()),
-    //         parent: None,
-    //     }
-    // }
 }
-
-// struct DirIter<'a> {
-//     children: &'a Box<dyn Iterator<Item = Rc<RefCell<Dir>>>>,
-//     parent: Option<Box<DirIter<'a>>>,
-// }
-
-// impl<'a> Iterator for DirIter<'a> {
-//     type Item = Dir;
-
-//     fn next(&mut self) -> Option<Self::Item> {}
-// }
 
 fn parse_into_tree() -> Rc<RefCell<Dir>> {
     let lines = read_lines("inputs/day07.txt").skip(1);
